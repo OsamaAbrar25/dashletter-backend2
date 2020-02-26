@@ -5,11 +5,11 @@ const path = require('path')
 const port = 4000
 
 //including client side file
-app.use(express.static(path.join(__dirname, '../dashletter_frontend-master/build')))
+app.use(express.static(path.join(__dirname, '../build')))
 
 //starting fronteOsamaAbrar25/dashletter-backend2.gitnd
 app.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../dashletter_frontend-master/build', 'index.html'))
+    res.sendFile(path.join(__dirname, '../build', 'index.html'))
 })
 
 //hosting at localhost:4000
