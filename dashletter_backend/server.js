@@ -7,7 +7,7 @@ const port = 4000
 //including client side file
 app.use(express.static(path.join(__dirname, '../dashletter_frontend-master/build')))
 
-//starting fronteOsamaAbrar25/dashletter-backend2.gitnd
+//starting frontend
 app.get('/', (req, res)=>{
     res.sendFile(path.join(__dirname, '../dashletter_frontend-master/build', 'index.html'))
 })
