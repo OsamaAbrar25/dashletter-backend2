@@ -10,9 +10,11 @@ const con = require('../database/connection')
 
 //starting frontend
 users.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../../build', 'index.html'))
+    res.send('Hello')
 })
 
+
+//for login
 users.post('/login', (req, res)=>{
     user_email = req.body.email
     user_password = req.body.password
