@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT || 5000
 
 //including client side file
-app.use(express.static(path.join(__dirname, '../build')))
+
 
 //including json parser
 app.use(bodyParser.urlencoded({extended:false}))
