@@ -6,7 +6,6 @@ const mysql = require('mysql')
 
 users.use(cors())
 
-const con = require('../database/connection')
 
 //starting frontend
 users.get('/', (req, res)=>{
