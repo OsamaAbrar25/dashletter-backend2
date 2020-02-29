@@ -1,16 +1,19 @@
 const express = require('express')
 const app = express()
 const path = require('path')
-
-const port = 4000
+const bodyParser = require('body-parser')
+const port = process.env.PORT || 4000
 
 //including client side file
 app.use(express.static(path.join(__dirname, '../build')))
 
-//starting frontend
-app.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../build', 'index.html'))
-})
+//including json parser
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+
+
+var Users = require('./routes/user')
+app.use('/users', Users)
 
 //hosting at localhost:4000
 app.listen(port, (err)=>{
@@ -20,3 +23,4 @@ app.listen(port, (err)=>{
         console.log(`server started at ${port}`)
     }
 })
+   
