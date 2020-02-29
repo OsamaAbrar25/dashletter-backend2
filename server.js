@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 
 
 var Users = require('./routes/user')
-app.use('/users', Users)
+app.use('', Users)
 
 //hosting at localhost:4000
 app.listen(port, (err)=>{
