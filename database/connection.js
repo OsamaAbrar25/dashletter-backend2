@@ -1,7 +1,7 @@
 const mysql = require('mysql')
 
 //create connection
-var con = mysql.createConnection({
+var con = mysql.createPool({
     host:'us-cdbr-iron-east-04.cleardb.net',
     user: 'b46c060415a5f5', 
     password: 'd189f313',
@@ -13,5 +13,7 @@ con.connect((err)=>{
     if(err) throw err;
     console.log('connected')
 })
+
+
 
 module.exports = con
