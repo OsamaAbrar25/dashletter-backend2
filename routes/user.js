@@ -10,8 +10,12 @@ con = require('../database/connection')
 
 //starting frontend
 users.get('/', (req, res)=>{
-    res.send('Hello')
-})
+    if (req.session.key) {
+        res.redirect('/home');
+    } else {
+        res.send('Hello not logged in !');
+    }
+});
 
 
 //for login
@@ -29,13 +33,14 @@ users.post('/login', (req, res)=>{
             res.send('wrong password and email')
         } else {
             if(sha256(result[0].password) == hashPass) {
+                req.session.key = result[0].email;
                 res.send('user availible')
             } else {
                 res.send('wrong password and email')
             }
         }
-    })
-})
+    });
+});
 
 //post request for signup
 users.post('/signup', (req, res)=>{
@@ -61,7 +66,29 @@ users.post('/signup', (req, res)=>{
         } else {
             res.send('user already exits')
         }
-    })
+    });
+});
+
+
+//user main page
+users.get('/home', (req, res)=>{
+    if (req.session.key) {
+        res.send('hello bro you logged in');
+    } else {
+        res.redirect('/');
+    }
+    
 })
+
+//user logout
+users.get('/logout', (req, res)=>{
+    if (req.session.key) {
+        req.session.destroy( ()=>{
+            res.redirect('/');
+        });
+    } else {
+        res.redirect('/');
+    }
+});
 
 module.exports = users
