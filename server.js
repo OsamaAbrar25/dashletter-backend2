@@ -11,9 +11,6 @@ client = redis.createClient(process.env.REDIS_URL);
 
 const port = process.env.PORT || 5000;
 
-//including client side file
-
-
 //including json parser
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
