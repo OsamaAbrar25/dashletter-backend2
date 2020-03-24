@@ -4,7 +4,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const randomstring = require('randomstring');
-
 const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 const cookieParser = require('cookie-parser');

@@ -8,9 +8,4 @@ var con = mysql.createPool({
     database: 'heroku_f1f146e523aa9bd'
 });
 
-//checking connection
-
-
-
-
 module.exports = con
