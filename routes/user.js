@@ -6,7 +6,7 @@ const session = require('express-session')
 
 users.use(cors())
 
-con = require('../database/connection')
+con = require('../database/connection');
 
 //starting frontend
 users.get('/', (req, res)=>{
@@ -90,5 +90,14 @@ users.get('/logout', (req, res)=>{
         res.redirect('/');
     }
 });
+
+
+//added blog.json
+const blog = require('../asset/blog.json');
+
+//blog api
+users.get('/blog', (req, res)=>{
+    res.json(blog);
+})
 
 module.exports = users

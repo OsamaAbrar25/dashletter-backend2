@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const path = require('path');
+var compression = require('compression')
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const randomstring = require('randomstring');
@@ -11,7 +11,8 @@ client = redis.createClient(process.env.REDIS_URL);
 
 const port = process.env.PORT || 5000;
 
-//including json parser
+//middleware
+app.use(compression())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 app.use(cookieParser(randomstring.generate()))
