@@ -3,6 +3,8 @@ const users = express.Router()
 const cors = require('cors')
 const sha256 = require('js-sha256')
 const session = require('express-session')
+const url = require('url');
+const querystring = require('querystring');
 
 users.use(cors())
 
@@ -92,12 +94,9 @@ users.get('/logout', (req, res)=>{
 });
 
 
-//added blog.json
-
-
 //blog api
-users.post('/blog', (req, res)=>{
-    blog_category = req.body.category;
+users.get('/blog', (req, res)=>{
+    blog_category = req.query.category;
     blog_json = require(`../asset/category/${blog_category}.json`);
     res.json(blog_json);
 })
