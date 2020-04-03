@@ -93,11 +93,13 @@ users.get('/logout', (req, res)=>{
 
 
 //added blog.json
-const blog = require('../asset/blog.json');
+
 
 //blog api
-users.get('/blog', (req, res)=>{
-    res.json(blog);
+users.post('/blog', (req, res)=>{
+    blog_category = req.body.category;
+    blog_json = require(`../asset/category/${blog_category}.json`);
+    res.json(blog_json);
 })
 
 module.exports = users
