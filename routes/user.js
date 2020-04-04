@@ -1,12 +1,12 @@
-const express = require('express')
-const users = express.Router()
-const cors = require('cors')
-const sha256 = require('js-sha256')
-const session = require('express-session')
+const express = require('express');
+const users = express.Router();
+const cors = require('cors');
+const sha256 = require('js-sha256');
+const session = require('express-session');
 const url = require('url');
 const querystring = require('querystring');
 
-users.use(cors())
+users.use(cors());
 
 con = require('../database/connection');
 
@@ -22,23 +22,23 @@ users.get('/', (req, res)=>{
 
 //for login
 users.post('/login', (req, res)=>{
-    user_email = req.body.email
-    user_password = req.body.password
-    hashPass = sha256(user_password)
+    user_email = req.body.email;
+    user_password = req.body.password;
+    hashPass = sha256(user_password);
     
-    var sql = `select * from login where email like "${user_email}"`
+    var sql = `select * from login where email like "${user_email}"`;
     con.query(sql, (err, result)=>{
         if (err) {
-            res.send(`error: ${err.message}`)
+            res.send(`error: ${err.message}`);
         }
         else if(result.length == 0) {
-            res.send('wrong password and email')
+            res.send('wrong password and email');
         } else {
             if(sha256(result[0].password) == hashPass) {
                 req.session.key = result[0].email;
-                res.send('user availible')
+                res.send('user availible');
             } else {
-                res.send('wrong password and email')
+                res.send('wrong password and email');
             }
         }
     });
@@ -47,26 +47,26 @@ users.post('/login', (req, res)=>{
 //post request for signup
 users.post('/signup', (req, res)=>{
 
-    user_email = req.body.email
-    user_password = req.body.password
-    token = sha256(user_email)
+    user_email = req.body.email;
+    user_password = req.body.password;
+    token = sha256(user_email);
 
     var sql = `select * from login where email like "${user_email}"`;
     con.query(sql, (err, result)=>{
         if (err) {
-            res.send(`error : ${err.message}`)
+            res.send(`error : ${err.message}`);
         } else if(result.length == 0) {
-            var sql = `insert into login values("${token}", "${user_email}", "${user_password}")`
+            var sql = `insert into login values("${token}", "${user_email}", "${user_password}")`;
             con.query(sql, (err, result)=>{
                 if (err) {
-                    res.send(`error : ${err.message}`)
+                    res.send(`error : ${err.message}`);
                 } else {
-                    res.send('credentials inserted')
+                    res.send('credentials inserted');
                 }
             })
             
         } else {
-            res.send('user already exits')
+            res.send('user already exits');
         }
     });
 });
