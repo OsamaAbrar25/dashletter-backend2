@@ -3,7 +3,7 @@ var fs = require('fs')
 
  //list of files_blog
  files_blog = ['../asset/category/fashion.json', '../asset/category/food.json', '../asset/category/travel.json', '../asset/category/music.json', '../asset/category/lifestyle.json', '../asset/category/fitness.json', '../asset/category/DIY.json', '../asset/category/sports.json', '../asset/category/finance.json', '../asset/category/political.json', '../asset/category/parenting.json', '../asset/category/business.json', '../asset/category/personal.json', '../asset/category/movie.json', '../asset/category/car.json', '../asset/category/news.json', 
- '../asset/category/pet.json', '../asset/category/gaming.json', '../asset/category/random.json', '../asset/category/corona.js']
+ '../asset/category/pet.json', '../asset/category/gaming.json', '../asset/category/random.json', '../asset/category/corona.json']
 
 var j = 0
 
