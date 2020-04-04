@@ -19,7 +19,6 @@ users.get('/', (req, res)=>{
     }
 });
 
-
 //for login
 users.post('/login', (req, res)=>{
     user_email = req.body.email;
@@ -75,7 +74,6 @@ users.post('/signup', (req, res)=>{
     
 });
 
-
 //user main page
 users.get('/home', (req, res)=>{
     if (req.session.key) {
@@ -90,13 +88,13 @@ users.get('/home', (req, res)=>{
 users.get('/logout', (req, res)=>{
     if (req.session.key) {
         req.session.destroy( ()=>{
+            res.clearCookie('connect.sid', { path: '/' });
             res.redirect('/');
         });
     } else {
         res.redirect('/');
     }
 });
-
 
 //blog api
 users.get('/blog', (req, res)=>{
