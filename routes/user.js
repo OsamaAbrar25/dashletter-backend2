@@ -15,7 +15,7 @@ users.get('/', (req, res)=>{
     if (req.session.key) {
         res.redirect('/home');
     } else {
-        res.send('Hello not logged in !');
+        res.status(400).send('Hello not logged in !');
     }
 });
 
@@ -25,20 +25,20 @@ users.post('/login', (req, res)=>{
     user_email = req.body.email;
     user_password = req.body.password;
     hashPass = sha256(user_password);
-    
+
     var sql = `select * from login where email like "${user_email}"`;
     con.query(sql, (err, result)=>{
         if (err) {
             res.send(`error: ${err.message}`);
         }
         else if(result.length == 0) {
-            res.send('wrong password and email');
+            res.status(400).send('wrong password and email');
         } else {
             if(sha256(result[0].password) == hashPass) {
                 req.session.key = result[0].email;
                 res.send('user availible');
             } else {
-                res.send('wrong password and email');
+                res.status(400).send('wrong password and email');
             }
         }
     });
@@ -49,26 +49,30 @@ users.post('/signup', (req, res)=>{
 
     user_email = req.body.email;
     user_password = req.body.password;
-    token = sha256(user_email);
+    if (user_email.length != 0 && user_password.length != 0) {
+        token = sha256(user_email);
+        var sql = `select * from login where email like "${user_email}"`;
+        con.query(sql, (err, result)=>{
+            if (err) {
+                res.send(`error : ${err.message}`);
+            } else if(result.length == 0) {
+                var sql = `insert into login values("${token}", "${user_email}", "${user_password}")`;
+                con.query(sql, (err, result)=>{
+                    if (err) {
+                        res.send(`error : ${err.message}`);
+                    } else {
+                        res.send('credentials inserted');
+                    }
+                });
 
-    var sql = `select * from login where email like "${user_email}"`;
-    con.query(sql, (err, result)=>{
-        if (err) {
-            res.send(`error : ${err.message}`);
-        } else if(result.length == 0) {
-            var sql = `insert into login values("${token}", "${user_email}", "${user_password}")`;
-            con.query(sql, (err, result)=>{
-                if (err) {
-                    res.send(`error : ${err.message}`);
-                } else {
-                    res.send('credentials inserted');
-                }
-            })
-            
-        } else {
-            res.send('user already exits');
-        }
-    });
+            } else {
+                res.send('user already exits');
+            }
+        });
+    } else {
+        res.status(400).send('bad request');
+    }
+    
 });
 
 
@@ -80,7 +84,7 @@ users.get('/home', (req, res)=>{
         res.redirect('/');
     }
     
-})
+});
 
 //user logout
 users.get('/logout', (req, res)=>{
@@ -99,6 +103,6 @@ users.get('/blog', (req, res)=>{
     blog_category = req.query.category;
     blog_json = require(`../asset/category/${blog_category}.json`);
     res.json(blog_json);
-})
+});
 
 module.exports = users
