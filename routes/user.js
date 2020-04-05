@@ -16,7 +16,7 @@ users.get('/', (req, res)=>{
     if (req.session.key) {
         res.redirect('/home');
     } else {
-        res.status(400).send('Hello not logged in !');
+        res.status(400).json({message:'not logged in'});
     }
 });
 
@@ -24,25 +24,28 @@ users.get('/', (req, res)=>{
 users.post('/login', (req, res)=>{
     user_email = req.body.email;
     user_password = req.body.password;
-    hashPass = sha256(user_password);
-
-    var sql = `select * from login where email like "${user_email}"`;
-    con.query(sql, (err, result)=>{
-        if (err) {
-            res.send(`error: ${err.message}`);
-        }
-        else if(result.length == 0) {
-            res.status(400).send('wrong password and email');
-        } else {
-            if(sha256(result[0].password) == hashPass) {
-                req.session.email = result[0].email;
-                req.session.key = randomstring.generate();
-                res.send('user availible');
-            } else {
-                res.status(400).send('wrong password and email');
+    if (user_email.length != 0) {
+        hashPass = sha256(user_password);
+        var sql = `select * from login where email like "${user_email}"`;
+        con.query(sql, (err, result)=>{
+            if (err) {
+                res.send(`error: ${err.message}`);
             }
-        }
-    });
+            else if(result.length == 0) {
+                res.status(400).json({message:'wrong password and email'});
+            } else {
+                if(sha256(result[0].password) == hashPass) {
+                    req.session.email = result[0].email;
+                    req.session.key = randomstring.generate();
+                    res.json({message:'user available'});
+                } else {
+                    res.status(400).json({message:'wrong password and email'});
+                }
+            }
+        });
+    } else {
+        res.json({message:'invalid input'});
+    }
 });
 
 //post request for signup
@@ -62,16 +65,16 @@ users.post('/signup', (req, res)=>{
                     if (err) {
                         res.send(`error : ${err.message}`);
                     } else {
-                        res.send('credentials inserted');
+                        res.json({message:'credentials inserted'});
                     }
                 });
 
             } else {
-                res.send('user already exits');
+                res.json({message:'user already exits'});
             }
         });
     } else {
-        res.status(400).send('bad request');
+        res.status(400).json({message:'bad request'});
     }
     
 });
@@ -79,7 +82,7 @@ users.post('/signup', (req, res)=>{
 //user main page
 users.get('/home', (req, res)=>{
     if (req.session.key) {
-        res.send('hello bro you logged in');
+        res.json({message:'hello bro you logged in'});
     } else {
         res.redirect('/');
     }
@@ -91,7 +94,7 @@ users.get('/logout', (req, res)=>{
     if (req.session.key) {
         req.session.destroy( ()=>{
             res.clearCookie('connect.sid', { path: '/' });
-            res.send('logged out successfully');
+            res.json({message:'logged out successfully'});
         });
     } else {
         res.redirect('/');
