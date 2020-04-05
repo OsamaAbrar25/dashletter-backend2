@@ -91,7 +91,7 @@ users.get('/logout', (req, res)=>{
     if (req.session.key) {
         req.session.destroy( ()=>{
             res.clearCookie('connect.sid', { path: '/' });
-            res.redirect('/');
+            res.send('logged out successfully');
         });
     } else {
         res.redirect('/');
