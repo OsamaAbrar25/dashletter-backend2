@@ -5,6 +5,7 @@ const sha256 = require('js-sha256');
 const session = require('express-session');
 const url = require('url');
 const querystring = require('querystring');
+const randomstring = require('randomstring');
 
 users.use(cors());
 
@@ -34,7 +35,8 @@ users.post('/login', (req, res)=>{
             res.status(400).send('wrong password and email');
         } else {
             if(sha256(result[0].password) == hashPass) {
-                req.session.key = result[0].email;
+                req.session.email = result[0].email;
+                req.session.key = randomstring.generate();
                 res.send('user availible');
             } else {
                 res.status(400).send('wrong password and email');
