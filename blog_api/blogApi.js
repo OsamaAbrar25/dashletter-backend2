@@ -72,7 +72,7 @@ function removeDuplicatesBlog( arr, prop ) {
     return newArr;
 }
 
-setInterval(processGet, 2*60*60*1000);
+processGet();
 
 
 
