@@ -1,2 +1,2 @@
 web: node server.js
-worker: node blogApi.js
+worker: node ./blogApi/blogApi.js
