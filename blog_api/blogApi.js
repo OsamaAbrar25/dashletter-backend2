@@ -27,8 +27,8 @@ async function processGet() {
             if (data.length != 0) {
                 // parsing data from string to json
                 category = JSON.parse(data);
-                category.push(contents);
-                removeDuplicatesBlog(category, 'title');
+                category = contents.concat(category);
+                category = removeDuplicatesBlog(category, 'title');
                 
                 fs.writeFileSync(files_blog[j], JSON.stringify(category)); 
             } else {
@@ -72,7 +72,7 @@ function removeDuplicatesBlog( arr, prop ) {
     return newArr;
 }
 
-setInterval(processGet, 3600000);
+setInterval(processGet, 2*60*60*1000);
 
 
 
