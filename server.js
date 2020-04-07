@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
+
 var compression = require('compression')
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 const key_secret = '2jUgVJMRs2xunhMNojYX19YlN9MbEA';
 
 //middleware
-users.use(cors());
+
 app.use(compression())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())

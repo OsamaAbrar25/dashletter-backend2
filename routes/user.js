@@ -1,5 +1,6 @@
 const express = require('express');
 const users = express.Router();
+const cors = require('cors');
 const sha256 = require('js-sha256');
 const session = require('express-session');
 const url = require('url');
@@ -9,6 +10,8 @@ const randomstring = require('randomstring');
 
 
 con = require('../database/connection');
+
+users.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range']}));
 
 //starting frontend
 users.get('/', (req, res)=>{
