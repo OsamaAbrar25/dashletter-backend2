@@ -4,6 +4,7 @@ var compression = require('compression')
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const redis = require('redis');
+const cors = require('cors');
 const redisStore = require('connect-redis')(session);
 const cookieParser = require('cookie-parser');
 client = redis.createClient(process.env.REDIS_URL);
@@ -13,6 +14,8 @@ const port = process.env.PORT || 5000;
 const key_secret = '2jUgVJMRs2xunhMNojYX19YlN9MbEA';
 
 //middleware
+app.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], 
+allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true}));
 app.use(compression())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())

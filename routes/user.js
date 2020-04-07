@@ -1,17 +1,13 @@
 const express = require('express');
 const users = express.Router();
-const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const sha256 = require('js-sha256');
 const session = require('express-session');
 const url = require('url');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
 
-
-
 con = require('../database/connection');
-
-users.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true}));
 
 //starting frontend
 users.get('/', (req, res)=>{
@@ -84,7 +80,7 @@ users.post('/signup', (req, res)=>{
 //user main page
 users.get('/home', (req, res)=>{
     if (req.session.key) {
-        res.json({message:'hello bro you logged in'});
+        res.json({message:`hello bro you logged in ${req.session.email}`});
     } else {
         res.redirect('/');
     }
