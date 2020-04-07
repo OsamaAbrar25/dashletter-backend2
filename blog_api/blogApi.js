@@ -3,12 +3,12 @@ var fs = require('fs')
 
  //list of files_blog
  files_blog = ['../asset/category/fashion.json', '../asset/category/food.json', '../asset/category/travel.json', '../asset/category/music.json', '../asset/category/lifestyle.json', '../asset/category/fitness.json', '../asset/category/DIY.json', '../asset/category/sports.json', '../asset/category/finance.json', '../asset/category/political.json', '../asset/category/parenting.json', '../asset/category/business.json', '../asset/category/personal.json', '../asset/category/movie.json', '../asset/category/car.json', '../asset/category/news.json', 
- '../asset/category/pet.json', '../asset/category/gaming.json', '../asset/category/corona.json', '../asset/category/random.json']
+ '../asset/category/pet.json', '../asset/category/gaming.json', '../asset/category/corona.json', '../asset/category/all.json']
 
 var j = 0
 
 //list of queries
-query = ['fashion clothing blog', 'food blog', 'travel blog', 'music blog', 'lifestyle blog', 'fitness blog', 'DIY blog', 'sports blog', 'finance blog',
+query = ['fashion clothing blog', 'food OR edible OR street food OR snacks', 'travel blog', 'music blog', 'lifestyle blog', 'fitness blog', 'DIY blog', 'sports blog', 'finance blog',
  'political blog', 'parenting blog', 'business blog', 'personal blog', 'movie blog', 'car blog', 'news blog', 'pet dog cat blog', 'gaming blog', 'coronavirus blog', 'blog']
 
 async function processGet() {
@@ -51,8 +51,8 @@ async function processGet() {
 function getURL(query) {
 
     url_blog = 'http://newsapi.org/v2/everything?'+
-    `q=${query}&` +
-    'sortBy=popularity&'+
+    `qInTitle=${query}&` +
+    'sortBy=relevancy&'+
     'language=en&'+
     'totalResults=100&'+
     'pageSize=100&'+
