@@ -1,13 +1,12 @@
 const express = require('express');
 const users = express.Router();
-const cors = require('cors');
 const sha256 = require('js-sha256');
 const session = require('express-session');
 const url = require('url');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
 
-users.use(cors());
+
 
 con = require('../database/connection');
 
