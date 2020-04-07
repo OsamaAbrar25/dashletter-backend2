@@ -52,7 +52,7 @@ function getURL(query) {
 
     url_blog = 'http://newsapi.org/v2/everything?'+
     `qInTitle=${query}&` +
-    'sortBy=relevancy&'+
+    'sortBy=publishedAt&'+
     'language=en&'+
     'totalResults=100&'+
     'pageSize=100&'+
