@@ -8,8 +8,8 @@ var fs = require('fs')
 var j = 0
 
 //list of queries
-query = ['fashion clothing blog', 'food OR edible OR street food OR snacks', 'travel blog', 'music blog', 'lifestyle blog', 'fitness blog', 'DIY blog', 'sports blog', 'finance blog',
- 'political blog', 'parenting blog', 'business blog', 'personal blog', 'movie blog', 'car blog', 'news blog', 'pet dog cat blog', 'gaming blog', 'coronavirus blog', 'blog']
+query = ['fashion clothing blog', 'edible OR street food OR snacks OR food recipe', 'travel blog', 'music blog', 'lifestyle blog', 'fitness blog', 'DIY blog', 'sports blog', 'finance blog',
+ 'political blog', 'parenting blog', 'business blog', 'personal blog', 'movie blog', 'car blog', 'news blog', 'pet dog cat blog', 'gaming blog', 'coronavirus blog', 'fashion OR health OR stock market OR movie OR sports']
 
 async function processGet() {
     for (i in query) {
