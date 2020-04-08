@@ -42,12 +42,12 @@ users.post('/login', (req, res)=>{
             }
         });
     } else {
-        res.json({message:'invalid input'});
+        res.status(400).json({message:'invalid input'});
     }
-});
+});message
 
 //post request for signup
-users.post('/signup', (req, res)=>{
+users.post('/signup', (req, res)=>{message
 
     user_email = req.body.email;
     user_password = req.body.password;
