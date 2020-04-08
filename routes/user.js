@@ -10,8 +10,7 @@ const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-users.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], 
-allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true, credentials:true}));
+users.use(cors());
 
 //starting frontend
 users.get('/', (req, res)=>{
