@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 app.use(cookieParser(key_secret))
 app.use(session({
-    cookie: {maxAge: 2*60*60*1000, secure:true, httpOnly:false},
+    cookie: {maxAge: 2*60*60*1000, secure:true, httpOnly:true},
     secret:key_secret,
     store: new redisStore({
         host: process.env.REDIS_HOST, 
