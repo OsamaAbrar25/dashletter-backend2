@@ -44,7 +44,7 @@ users.post('/login', (req, res)=>{
     } else {
         res.status(400).json({message:'invalid input'});
     }
-});message
+});
 
 //post request for signup
 users.post('/signup', (req, res)=>{message
