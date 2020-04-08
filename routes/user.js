@@ -10,7 +10,7 @@ const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-users.use(cors({exposedHeaders:['set-cookie']}));
+users.use(cors({exposedHeaders:['set-cookie'], origin:true}));
 
 //starting frontend
 users.get('/', (req, res)=>{
