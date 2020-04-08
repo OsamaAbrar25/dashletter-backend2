@@ -4,12 +4,13 @@ const cookieParser = require('cookie-parser');
 const sha256 = require('js-sha256');
 const session = require('express-session');
 const url = require('url');
+const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-app.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], 
+users.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], 
 allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true}));
 
 //starting frontend
