@@ -10,7 +10,7 @@ const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-users.use(cors({credentials:true, exposedHeaders:['set-cookie'], allowedHeaders:['Content-Type', 'set-cookie'], origin:true}));
+users.use(cors({exposedHeaders:['set-cookie']}));
 
 //starting frontend
 users.get('/', (req, res)=>{
@@ -38,8 +38,6 @@ users.post('/login', (req, res)=>{
                 if(sha256(result[0].password) == hashPass) {
                     req.session.email = result[0].email;
                     req.session.key = randomstring.generate();
-                    sid = req.sessionID;
-                    res.cookie('rememberme', sid, { maxAge: 2*60*60*1000, httpOnly: true })
                     res.json({message:'user available'});
                 } else {
                     res.status(400).json({message:'wrong password and email'});
