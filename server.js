@@ -4,7 +4,7 @@ var compression = require('compression')
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const redis = require('redis');
-const cors = require('cors');
+
 const redisStore = require('connect-redis')(session);
 const cookieParser = require('cookie-parser');
 client = redis.createClient(process.env.REDIS_URL);
