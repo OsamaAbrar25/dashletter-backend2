@@ -11,7 +11,7 @@ const randomstring = require('randomstring');
 con = require('../database/connection');
 
 users.use(cors({exposedHeaders:['Content-Range', 'X-Content-Range'], 
-allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true}));
+allowedHeaders:['Content-Type', 'Authorization'], preflightContinue:true, credentials:true}));
 
 //starting frontend
 users.get('/', (req, res)=>{
