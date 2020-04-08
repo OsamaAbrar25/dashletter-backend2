@@ -38,6 +38,7 @@ users.post('/login', (req, res)=>{
                 if(sha256(result[0].password) == hashPass) {
                     req.session.email = result[0].email;
                     req.session.key = randomstring.generate();
+                    sid = req.sessionID;
                     res.cookie('cookieName', { "session": sid});
                     res.json({message:'user available'});
                 } else {
