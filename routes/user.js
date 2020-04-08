@@ -51,7 +51,7 @@ users.post('/signup', (req, res)=>{
 
     user_email = req.body.email;
     user_password = req.body.password;
-    if (user_email.length != 0 || user_password.length != 0) {
+    if (user_email.length != 0 && user_password.length != 0) {
         token = sha256(user_email);
         var sql = `select * from login where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
