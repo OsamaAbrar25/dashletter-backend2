@@ -10,7 +10,7 @@ const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-
+users.use(cors());
 
 //starting frontend
 users.get('/', (req, res)=>{
