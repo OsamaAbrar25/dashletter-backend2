@@ -47,7 +47,7 @@ users.post('/login', (req, res)=>{
 });
 
 //post request for signup
-users.post('/signup', (req, res)=>{message
+users.post('/signup', (req, res)=>{
 
     user_email = req.body.email;
     user_password = req.body.password;
