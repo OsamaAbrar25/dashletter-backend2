@@ -105,7 +105,10 @@ users.get('/logout', (req, res)=>{
 //blog api
 users.get('/blog', (req, res)=>{
     blog_category = req.query.category;
+    spos = req.query.sp;
+    epos = req.query.ep;
     blog_json = require(`../asset/category/${blog_category}.json`);
+    blog_json = blog_json.slice(spos, epos);
     res.json(blog_json);
 });
 
