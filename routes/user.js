@@ -75,7 +75,7 @@ users.post('/signup', (req, res)=>{
                         } else {
                             res.json({message:'user details inserted'});
                         }
-                    }).catch(console.log(errr));
+                    })
                 }
                 userInsert();
                 
@@ -85,12 +85,12 @@ users.post('/signup', (req, res)=>{
                     } else {
                         res.json({message:'credentials inserted'});
                     }
-                }).catch(console.log(err));
+                })
 
             } else {
                 res.json({message:'user already exits'});
             }
-        }).catch(console.log(error));
+        })
     } else {
         res.status(400).json({message:'bad request'});
     }
