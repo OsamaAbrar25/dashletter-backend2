@@ -30,7 +30,7 @@ users.post('/login', (req, res)=>{
         var sql = `select * from crendential where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
             if (err) {
-                console.log('oops something went wrong');
+                console.log(err.message);
             }
             else if(result.length == 0) {
                 res.status(400).json({message:'wrong password and email'});
@@ -59,38 +59,32 @@ users.post('/signup', (req, res)=>{
     user_dob = req.body.dob;
     user_country = req.body.country;
 
-    if (user_email.length != 0 && user_password.length != 0 && user_name.length != 0 && user_gender.length != 0 && user_dob.length != 0 && user_country.length != 0) {
+    if (user_email.length != 0 && user_password.length != 0) {
         token = sha256(user_email);
         var sql = `select * from crendential where email like "${user_email}"`;
-        con.query(sql, (error, result)=>{
-            if (error) {
-                console.log('oops something went wrong');
+        con.query(sql, (err, result)=>{
+            if (err) {
+                console.log(err.message);
             } else if(result.length == 0) {
                 var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}")`;
                 var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
-                async function userInsert(){
-                    await con.query(sql_user, (errr)=>{
-                        if(errr) {
-                            console.log('oops something went wrong');
-                        } else {
-                            res.json({message:'user details inserted'});
-                        }
-                    })
-                }
-                userInsert();
-                
+                con.query(sql_user, (err)=>{
+                    if(err) {
+                        console.log(err.message);
+                    } 
+                });
                 con.query(sql, (err)=>{
                     if (err) {
-                        console.log('oops something went wrong');
+                        console.log(err.message)
                     } else {
                         res.json({message:'credentials inserted'});
                     }
-                })
+                });
 
             } else {
                 res.json({message:'user already exits'});
             }
-        })
+        });
     } else {
         res.status(400).json({message:'bad request'});
     }
