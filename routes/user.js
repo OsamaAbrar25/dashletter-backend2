@@ -59,7 +59,7 @@ users.post('/signup', (req, res)=>{
     user_dob = req.body.dob;
     user_country = req.body.country;
 
-    if (user_email.length != 0 && user_password.length != 0) {
+    if (user_email.length != 0 && user_password.length != 0 && user_name.length != 0 && user_gender.length != 0 && user_dob.length != 0 && user_country.length != 0) {
         token = sha256(user_email);
         var sql = `select * from crendential where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
@@ -68,13 +68,17 @@ users.post('/signup', (req, res)=>{
             } else if(result.length == 0) {
                 var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}")`;
                 var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
-                con.query(sql_user, (err)=>{
-                    if(err) {
-                        console.log(err.message);
-                    } else {
-                        res.json({message:'user details inserted'});
-                    }
-                });
+                async function userInsert(){
+                    await con.query(sql_user, (err)=>{
+                        if(err) {
+                            console.log(err.message);
+                        } else {
+                            res.json({message:'user details inserted'});
+                        }
+                    });
+                }
+                userInsert();
+                
                 con.query(sql, (err)=>{
                     if (err) {
                         console.log(err.message)
