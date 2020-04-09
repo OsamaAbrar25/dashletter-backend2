@@ -71,21 +71,21 @@ users.post('/signup', (req, res)=>{
                 async function userInsert(){
                     await con.query(sql_user, (err)=>{
                         if(err) {
-                            throw err;
+                            console.log(err.message);
                         } else {
                             res.json({message:'user details inserted'});
                         }
-                    }).catch(console.log(err.message));
+                    });
                 }
                 userInsert();
-
+                
                 con.query(sql, (err)=>{
                     if (err) {
-                        throw err;
+                        console.log(err.message)
                     } else {
                         res.json({message:'credentials inserted'});
                     }
-                }).catch(console.log(err.message));
+                });
 
             } else {
                 res.json({message:'user already exits'});
