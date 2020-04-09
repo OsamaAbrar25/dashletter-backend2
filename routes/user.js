@@ -27,10 +27,10 @@ users.post('/login', (req, res)=>{
     user_password = req.body.password;
     if (user_email.length != 0) {
         hashPass = sha256(user_password);
-        var sql = `select * from login where email like "${user_email}"`;
+        var sql = `select * from crendential where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
             if (err) {
-                res.send(`error: ${err.message}`);
+                console.log(err.message);
             }
             else if(result.length == 0) {
                 res.status(400).json({message:'wrong password and email'});
@@ -54,17 +54,30 @@ users.post('/signup', (req, res)=>{
 
     user_email = req.body.email;
     user_password = req.body.password;
+    user_name = req.body.name;
+    user_gender = req.body.gender;
+    user_dob = req.body.dob;
+    user_country = req.body.country;
+
     if (user_email.length != 0 && user_password.length != 0) {
         token = sha256(user_email);
-        var sql = `select * from login where email like "${user_email}"`;
+        var sql = `select * from crendential where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
             if (err) {
-                res.send(`error : ${err.message}`);
+                console.log(err.message);
             } else if(result.length == 0) {
-                var sql = `insert into login values("${token}", "${user_email}", "${user_password}")`;
-                con.query(sql, (err, result)=>{
+                var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}")`;
+                var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
+                con.query(sql_user, (err)=>{
+                    if(err) {
+                        console.log(err.message);
+                    } else {
+                        res.json({message:'user details inserted'});
+                    }
+                });
+                con.query(sql, (err)=>{
                     if (err) {
-                        res.send(`error : ${err.message}`);
+                        console.log(err.message)
                     } else {
                         res.json({message:'credentials inserted'});
                     }
