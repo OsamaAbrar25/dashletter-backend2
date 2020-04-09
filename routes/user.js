@@ -64,33 +64,33 @@ users.post('/signup', (req, res)=>{
         var sql = `select * from crendential where email like "${user_email}"`;
         con.query(sql, (err, result)=>{
             if (err) {
-                console.log(err);
+                throw err;
             } else if(result.length == 0) {
                 var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}")`;
                 var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
                 async function userInsert(){
                     await con.query(sql_user, (err)=>{
                         if(err) {
-                            console.log(err);
+                            throw err;
                         } else {
                             res.json({message:'user details inserted'});
                         }
-                    });
+                    }).catch(console.log(err));
                 }
                 userInsert();
                 
                 con.query(sql, (err)=>{
                     if (err) {
-                        console.log(err)
+                        throw err;
                     } else {
                         res.json({message:'credentials inserted'});
                     }
-                });
+                }).catch(console.log(err));
 
             } else {
                 res.json({message:'user already exits'});
             }
-        });
+        }).catch(console.log(err));
     } else {
         res.status(400).json({message:'bad request'});
     }
