@@ -95,7 +95,7 @@ users.post('/signup', (req, res)=>{
         res.status(400).json({message:'bad request'});
     }
     
-};
+});
 
 //user main page
 users.get('/home', (req, res)=>{
