@@ -126,9 +126,7 @@ users.get('/blog', (req, res)=>{
 
 users.get('/confirmation/:token', async (req, res) => {
     try {
-      const id = jwt.verify(req.params.token, verify_email.EMAIL_SECRET);
-      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id = ${id}`;
-      await con.query(sql);
+      res.send(req.params.token);
       console.log('confirmed');
     } catch (e) {
       res.send(e);
