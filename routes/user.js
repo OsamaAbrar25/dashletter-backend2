@@ -127,8 +127,10 @@ users.get('/blog', (req, res)=>{
 users.get('/confirmation/:token', async (req, res) => {
     try {
       var { user: { id } } = jwt.verify(req.params.token, 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf');
-      sql = `UPDATE crendential SET confirmed = true WHERE email = ${payload.id}`;
+      sql = `UPDATE crendential SET confirmed = true WHERE email = ${id}`;
       await con.query(sql);
+      res.send('user confirmed')
+
     } catch (e) {
       res.send(e);
     }
