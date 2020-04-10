@@ -127,15 +127,14 @@ users.get('/blog', (req, res)=>{
 users.get('/confirmation/:token', async (req, res) => {
     try {
       var payload = jwt.verify(req.params.token, 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf');
-      sql = `UPDATE crendential SET confirmed = true WHERE email = ${payload.id}`;
+      sql = `UPDATE crendential SET confirmed =  WHERE email = ${payload.id}`;
       await con.query(sql);
-      res.send('user confirmed')
+      res.send(payload.id);
 
     } catch (e) {
       res.send(e);
     }
-  
-    return res.redirect('thedashletter.herokuapp.com');
+
   });
 
 
