@@ -10,8 +10,6 @@ const randomstring = require('randomstring');
 
 con = require('../database/connection');
 
-
-
 //starting frontend
 users.get('/', (req, res)=>{
     if (req.session.key) {

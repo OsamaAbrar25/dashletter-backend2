@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 const key_secret = '2jUgVJMRs2xunhMNojYX19YlN9MbEA';
 
 //middleware
-users.use(cors({exposedHeaders:['set-cookie']}));
+app.use(cors({exposedHeaders:['set-cookie']}));
 app.use(compression())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
