@@ -77,7 +77,7 @@ users.post('/signup', (req, res)=>{
                     if (err) {
                         console.log(err.message)
                     } else {
-                        verify_email.signSendEmail(token, user_email);
+                        verify_email.signSendEmail(user_email, user_email);
                         res.json({message:'credentials inserted confirm your email'});
                     }
                 });
@@ -127,7 +127,7 @@ users.get('/blog', (req, res)=>{
 users.get('/confirmation/:token', async (req, res) => {
     try {
       const payload = jwt.verify(req.params.token, verify_email.EMAIL_SECRET);
-      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id = ${payload.id}`;
+      sql = `UPDATE crendential SET confirmed = true WHERE email = ${payload.id}`;
       await con.query(sql);
     } catch (e) {
       res.send(e);
