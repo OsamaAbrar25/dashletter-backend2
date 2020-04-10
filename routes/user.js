@@ -7,7 +7,7 @@ const url = require('url');
 const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
-import {signSendEmail, EMAIL_SECRET} from 'email.js';
+const verify_email = require('../tools/email.js');
 
 con = require('../database/connection');
 
@@ -65,7 +65,7 @@ users.post('/signup', (req, res)=>{
             if (err) {
                 console.log(err.message);
             } else if(result.length == 0) {
-                var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}")`;
+                var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}", false)`;
                 var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
                 con.query(sql_user, (err)=>{
                     if(err) {
@@ -76,7 +76,7 @@ users.post('/signup', (req, res)=>{
                     if (err) {
                         console.log(err.message)
                     } else {
-                        signSendEmail(token, user_email);
+                        verify_email.signSendEmail(token, user_email);
                         res.json({message:'credentials inserted confirm your email'});
                     }
                 });
@@ -125,9 +125,10 @@ users.get('/blog', (req, res)=>{
 
 users.get('/confirmation/:token', async (req, res) => {
     try {
-      const id = jwt.verify(req.params.token, EMAIL_SECRET);
+      const id = jwt.verify(req.params.token, verify_email.EMAIL_SECRET);
       sql = `UPDATE crendential SET confirmed = true WHERE crendential_id = ${id}`;
       await con.query(sql);
+      console.log('confirmed');
     } catch (e) {
       res.send('error');
     }
