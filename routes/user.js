@@ -7,6 +7,7 @@ const url = require('url');
 const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
+const jwt = require('jsonwebtoken');
 const verify_email = require('../tools/email.js');
 
 con = require('../database/connection');
