@@ -126,7 +126,7 @@ users.get('/blog', (req, res)=>{
 
 users.get('/confirmation/:token', async (req, res) => {
     try {
-      res.send(req.params.token);
+      res.send(verify_email.EMAIL_SECRET);
       console.log('confirmed');
     } catch (e) {
       res.send(e);
