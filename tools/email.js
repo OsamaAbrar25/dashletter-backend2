@@ -9,8 +9,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
-
 module.exports = {
 
     EMAIL_SECRET : 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf',
@@ -18,9 +16,9 @@ module.exports = {
     signSendEmail : function(token, email) {
         jwt.sign(
             {
-            id: token,
+            id: token
             },
-            EMAIL_SECRET,
+            'asdf1093KMnzxcvnkljvasdu09123nlasdasdf',
             {
             expiresIn: '1d',
             },
