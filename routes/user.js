@@ -7,6 +7,7 @@ const url = require('url');
 const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
+import {signSendEmail, EMAIL_SECRET} from 'email.js';
 
 con = require('../database/connection');
 
@@ -75,7 +76,8 @@ users.post('/signup', (req, res)=>{
                     if (err) {
                         console.log(err.message)
                     } else {
-                        res.json({message:'credentials inserted'});
+                        signSendEmail(token, user_email);
+                        res.json({message:'credentials inserted confirm your email'});
                     }
                 });
 
@@ -120,5 +122,18 @@ users.get('/blog', (req, res)=>{
     blog_json = blog_json.slice(spos, epos);
     res.json(blog_json);
 });
+
+users.get('/confirmation/:token', async (req, res) => {
+    try {
+      const id = jwt.verify(req.params.token, EMAIL_SECRET);
+      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id = ${id}`;
+      await con.query(sql);
+    } catch (e) {
+      res.send('error');
+    }
+  
+    return res.redirect('thedashletter.herokuapp.com');
+  });
+
 
 module.exports = users
