@@ -15,10 +15,10 @@ module.exports = {
 
     EMAIL_SECRET : 'h&rju68BDQWNdTra4IKjAH%x$gTCI$&A',
 
-    signSendEmail : function(id, email) {
+    signSendEmail : function(token, email) {
         jwt.sign(
             {
-            id,
+            id:token,
             },
             EMAIL_SECRET,
             {
