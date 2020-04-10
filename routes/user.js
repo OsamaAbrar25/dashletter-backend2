@@ -130,7 +130,7 @@ users.get('/confirmation/:token', async (req, res) => {
       await con.query(sql);
       console.log('confirmed');
     } catch (e) {
-      res.send('error');
+      res.send(e);
     }
   
     return res.redirect('thedashletter.herokuapp.com');
