@@ -11,8 +11,6 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
 
-    EMAIL_SECRET : 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf',
-
     signSendEmail : function(token, email) {
         jwt.sign(
             {
