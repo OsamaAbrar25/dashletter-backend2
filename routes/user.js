@@ -8,7 +8,7 @@ const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
-const {check, validationResult} = require('express-validator/check');
+const {check, validationResult} = require('express-validator');
 const verify_email = require('../tools/email.js');
 
 con = require('../database/connection');
@@ -23,7 +23,15 @@ users.get('/', (req, res)=>{
 });
 
 //for login
-users.post('/login', (req, res)=>{
+users.post('/login', [
+    check('email').isEmail().not().isEmpty().escape().normalizeEmail().withMessage('Your email is not valid'),
+    check('password').not().isEmpty().escape().withMessage('Your password is not valid'),
+],
+(req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     user_email = req.body.email;
     user_password = req.body.password;
     if (user_email.length != 0) {
@@ -51,8 +59,19 @@ users.post('/login', (req, res)=>{
 });
 
 //post request for signup
-users.post('/signup', (req, res)=>{
-
+users.post('/signup', [
+    check('country').not().isEmpty().escape().withMessage('Your country is not valid'),
+    check('name').not().isEmpty().escape().trim().withMessage('Your name is not valid'),
+    check('gender').not().isEmpty().escape().withMessage('Your gender is not valid'),
+    check('dob').not().isEmpty().escape().withMessage('Your date of birth is not valid'),
+    check('email').not().isEmpty().isEmail().escape().normalizeEmail().withMessage('Your email is not valid'),
+    check('password').not().isEmpty().escape().withMessage('Your password is not valid'),
+  ],
+(req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     user_email = req.body.email;
     user_password = req.body.password;
     user_name = req.body.name;
@@ -116,7 +135,14 @@ users.get('/logout', (req, res)=>{
 });
 
 //blog api
-users.get('/blog', (req, res)=>{
+users.get('/blog', [
+    check('category').not().isEmpty().escape().withMessage('Your input is not valid'),
+], 
+(req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     blog_category = req.query.category;
     spos = req.query.sp;
     epos = req.query.ep;
@@ -125,7 +151,14 @@ users.get('/blog', (req, res)=>{
     res.json(blog_json);
 });
 
-users.get('/confirmation/:token', async (req, res) => {
+users.get('/confirmation/:token', [
+    check('token').not().isEmpty().escape().withMessage('Your input is not valid'),
+],
+ async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     try {
       var payload = jwt.verify(req.params.token, 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf');
       sql = `UPDATE crendential SET confirmed = true WHERE crendential_id like ?`;
@@ -137,7 +170,8 @@ users.get('/confirmation/:token', async (req, res) => {
       res.send('<h3>Email Verified</h3>');
 
     } catch (e) {
-      res.send(e);
+    res.status(400).send('error');
+      console.log(e);
     }
 
   });
