@@ -8,6 +8,7 @@ const cors = require('cors');
 const querystring = require('querystring');
 const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
+const {check, validationResult} = require('express-validator/check');
 const verify_email = require('../tools/email.js');
 
 con = require('../database/connection');
@@ -27,8 +28,8 @@ users.post('/login', (req, res)=>{
     user_password = req.body.password;
     if (user_email.length != 0) {
         hashPass = sha256(user_password);
-        var sql = `select * from crendential where email like "${user_email}"`;
-        con.query(sql, (err, result)=>{
+        var sql = `select * from crendential where email like ?`;
+        con.query(sql, [user_email], (err, result)=>{
             if (err) {
                 console.log(err.message);
             }
@@ -61,19 +62,19 @@ users.post('/signup', (req, res)=>{
 
     if (user_email.length != 0 && user_password.length != 0) {
         token = sha256(user_email);
-        var sql = `select * from crendential where email like "${user_email}"`;
-        con.query(sql, (err, result)=>{
+        var sql = `select * from crendential where email like ?`;
+        con.query(sql, [user_email], (err, result)=>{
             if (err) {
                 console.log(err.message);
             } else if(result.length == 0) {
-                var sql = `insert into crendential values("${token}", "${user_email}", "${user_password}", false)`;
-                var sql_user = `insert into user_detail values("${token}","${user_name}","${user_gender}","${user_dob}", "${user_country}")`;
-                con.query(sql_user, (err)=>{
+                var sql = `insert into crendential values(?, ?, ?, false)`;
+                var sql_user = `insert into user_detail values(?, ?, ?, ?, ?)`;
+                con.query(sql_user, [token, user_name, user_gender, user_dob, user_country], (err)=>{
                     if(err) {
                         console.log(err.message);
                     } 
                 });
-                con.query(sql, (err)=>{
+                con.query(sql, [token, user_email, user_password], (err)=>{
                     if (err) {
                         console.log(err.message)
                     } else {
@@ -127,8 +128,12 @@ users.get('/blog', (req, res)=>{
 users.get('/confirmation/:token', async (req, res) => {
     try {
       var payload = jwt.verify(req.params.token, 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf');
-      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id like "${payload.id}"`;
-      await con.query(sql);
+      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id like ?`;
+      await con.query(sql, [payload.id], (err)=>{
+          if(err) {
+              console.log(err.message);
+          }
+      });
       res.send('<h3>Email Verified</h3>');
 
     } catch (e) {
