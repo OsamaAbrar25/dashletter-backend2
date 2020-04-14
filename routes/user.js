@@ -44,6 +44,7 @@ users.post('/login', [
                 res.status(400).json({message:'wrong password and email'});
             } else {
                 if(sha256(result[0].password) == hashPass) {
+                    req.session.username = result[0].username;
                     req.session.email = result[0].email;
                     req.session.key = randomstring.generate();
                     res.json({message:'user available'});
@@ -173,5 +174,13 @@ users.get('/confirmation/:token', [
 
   });
 
+users.get('/verification', (req, res)=>{
+    if (req.session.key) {
+        verify_email.signSendEmail(req.session.username, req.session.email);
+        return res.json({message: 'please verify your email'});
+    }
+    return res.status(400).json({message: 'Invalid request'});
+})
 
+  
 module.exports = users
