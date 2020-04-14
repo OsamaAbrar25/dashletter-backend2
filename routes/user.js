@@ -80,9 +80,8 @@ users.post('/signup', [
 
     date = new Date(user_date);
     user_dob = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    
 
-    token = sha256(user_email);
+    token = user_name.split(' ')[0] + randomstring.generate({length: 7, charset: 'numeric'});
     var sql = `select * from crendential where email like ?`;
     con.query(sql, [user_email], (err, result)=>{
         if (err) {
