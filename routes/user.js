@@ -10,8 +10,7 @@ const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
 const {check, validationResult} = require('express-validator');
 const verify_email = require('../tools/email.js');
-
-con = require('../database/connection');
+const con = require('../database/connection');
 
 //starting frontend
 users.get('/', (req, res)=>{
