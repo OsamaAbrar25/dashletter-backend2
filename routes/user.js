@@ -81,7 +81,7 @@ users.post('/signup', [
     date = new Date(user_date);
     user_dob = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
-    token = user_name.split(' ')[0] + randomstring.generate({length: 7, charset: 'numeric'});
+    username = user_name.split(' ')[0] + randomstring.generate({length: 7, charset: 'numeric'});
     var sql = `select * from crendential where email like ?`;
     con.query(sql, [user_email], (err, result)=>{
         if (err) {
@@ -89,16 +89,16 @@ users.post('/signup', [
         } else if(result.length == 0) {
             var sql = `insert into crendential values(?, ?, ?, false)`;
             var sql_user = `insert into user_detail values(?, ?, ?, ?, ?)`;
-            con.query(sql_user, [token, user_name, user_gender, user_dob, user_country], (err)=>{
+            con.query(sql_user, [username, user_name, user_gender, user_dob, user_country], (err)=>{
                 if(err) {
                     console.log(err.message);
                 } 
             });
-            con.query(sql, [token, user_email, user_password], (err)=>{
+            con.query(sql, [username, user_email, user_password], (err)=>{
                 if (err) {
                     console.log(err.message)
                 } else {
-                    verify_email.signSendEmail(token, user_email);
+                    verify_email.signSendEmail(username, user_email);
                     res.json({message:'credentials inserted confirm your email'});
                 }
             });
@@ -158,8 +158,8 @@ users.get('/confirmation/:token', [
     }
     try {
       var payload = jwt.verify(req.params.token, 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf');
-      sql = `UPDATE crendential SET confirmed = true WHERE crendential_id like ?`;
-      await con.query(sql, [payload.id], (err)=>{
+      sql = `UPDATE crendential SET confirmed = true WHERE username like ?`;
+      await con.query(sql, [payload.username], (err)=>{
           if(err) {
               console.log(err.message);
           }

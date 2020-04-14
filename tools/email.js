@@ -14,7 +14,7 @@ module.exports = {
     signSendEmail : function(token, email) {
         jwt.sign(
             {
-            id: token
+            username: token
             },
             'asdf1093KMnzxcvnkljvasdu09123nlasdasdf',
             {
