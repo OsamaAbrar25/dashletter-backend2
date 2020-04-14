@@ -75,8 +75,12 @@ users.post('/signup', [
     user_password = req.body.password;
     user_name = req.body.name;
     user_gender = req.body.gender;
-    user_dob = req.body.dob;
+    user_date = req.body.dob;
     user_country = req.body.country;
+
+    date = new Date(user_date);
+    user_dob = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    
 
     token = sha256(user_email);
     var sql = `select * from crendential where email like ?`;
