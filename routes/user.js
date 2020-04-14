@@ -94,7 +94,7 @@ users.post('/signup', [
                     console.log(err.message);
                 } 
             });
-            con.query(sql, [username, user_email, user_password], (err)=>{
+            con.query(sql, [username, user_email, sha256(user_password)], (err)=>{
                 if (err) {
                     console.log(err.message)
                 } else {
