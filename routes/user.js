@@ -79,37 +79,32 @@ users.post('/signup', [
     user_dob = req.body.dob;
     user_country = req.body.country;
 
-    if (user_email.length != 0 && user_password.length != 0) {
-        token = sha256(user_email);
-        var sql = `select * from crendential where email like ?`;
-        con.query(sql, [user_email], (err, result)=>{
-            if (err) {
-                console.log(err.message);
-            } else if(result.length == 0) {
-                var sql = `insert into crendential values(?, ?, ?, false)`;
-                var sql_user = `insert into user_detail values(?, ?, ?, ?, ?)`;
-                con.query(sql_user, [token, user_name, user_gender, user_dob, user_country], (err)=>{
-                    if(err) {
-                        console.log(err.message);
-                    } 
-                });
-                con.query(sql, [token, user_email, user_password], (err)=>{
-                    if (err) {
-                        console.log(err.message)
-                    } else {
-                        verify_email.signSendEmail(token, user_email);
-                        res.json({message:'credentials inserted confirm your email'});
-                    }
-                });
+    token = sha256(user_email);
+    var sql = `select * from crendential where email like ?`;
+    con.query(sql, [user_email], (err, result)=>{
+        if (err) {
+            console.log(err.message);
+        } else if(result.length == 0) {
+            var sql = `insert into crendential values(?, ?, ?, false)`;
+            var sql_user = `insert into user_detail values(?, ?, ?, ?, ?)`;
+            con.query(sql_user, [token, user_name, user_gender, user_dob, user_country], (err)=>{
+                if(err) {
+                    console.log(err.message);
+                } 
+            });
+            con.query(sql, [token, user_email, user_password], (err)=>{
+                if (err) {
+                    console.log(err.message)
+                } else {
+                    verify_email.signSendEmail(token, user_email);
+                    res.json({message:'credentials inserted confirm your email'});
+                }
+            });
 
-            } else {
-                res.json({message:'user already exits'});
-            }
-        });
-    } else {
-        res.status(400).json({message:'bad request'});
-    }
-    
+        } else {
+            res.json({message:'user already exits'});
+        }
+    });   
 });
 
 //user main page
