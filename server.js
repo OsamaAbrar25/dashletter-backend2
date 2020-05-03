@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const redis = require('redis');
 const cors = require('cors');
+const path = require('path');
 const redisStore = require('connect-redis')(session);
 const cookieParser = require('cookie-parser');
 client = redis.createClient(process.env.REDIS_URL);
@@ -12,6 +13,9 @@ client = redis.createClient(process.env.REDIS_URL);
 const port = process.env.PORT || 5000;
 
 const key_secret = '2jUgVJMRs2xunhMNojYX19YlN9MbEA';
+
+app.set('views',path.join(__dirname,'views'))
+app.set('view engine','hbs')
 
 //middleware
 app.use(cors({exposedHeaders:['set-cookie']}));

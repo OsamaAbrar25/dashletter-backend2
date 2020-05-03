@@ -5,7 +5,7 @@ const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
       user: 'dashletter01@gmail.com',
-      pass: 'Crock7$Robust$Ranger$gory7$Amendable$6fife',
+      pass: 'dashletter@2020',
     },
 });
 
@@ -27,7 +27,7 @@ module.exports = {
                 to: email,
                 subject: 'Confirm Email',
                 html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
-                });
+                });email
             },
         );
     }

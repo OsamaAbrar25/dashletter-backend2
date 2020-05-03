@@ -9,7 +9,8 @@ const querystring = require('querystring');
 const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
 const {check, validationResult} = require('express-validator');
-const verify_email = require('../tools/email.js');
+const verify_email = require('../tools/email_verification');
+const { signSendEmailFP } = require('../tools/forgot_password');
 const con = require('../database/connection');
 
 //starting frontend
@@ -23,8 +24,8 @@ users.get('/', (req, res)=>{
 
 //for login
 users.post('/login', [
-    check('email').isEmail().not().isEmpty().escape().normalizeEmail().withMessage('Your email is not valid'),
-    check('password').not().isEmpty().escape().withMessage('Your password is not valid'),
+    check('email').isEmail().not().isEmpty().escape().normalizeEmail(),
+    check('password').not().isEmpty().escape(),
 ],
 (req, res)=>{
     const errors = validationResult(req);
@@ -60,12 +61,12 @@ users.post('/login', [
 
 //post request for signup
 users.post('/signup', [
-    check('country').not().isEmpty().escape().withMessage('Your country is not valid'),
-    check('name').not().isEmpty().escape().trim().withMessage('Your name is not valid'),
-    check('gender').not().isEmpty().escape().withMessage('Your gender is not valid'),
-    check('dob').not().isEmpty().escape().withMessage('Your date of birth is not valid'),
-    check('email').not().isEmpty().isEmail().escape().normalizeEmail().withMessage('Your email is not valid'),
-    check('password').not().isEmpty().escape().withMessage('Your password is not valid'),
+    check('country').not().isEmpty().escape(),
+    check('name').not().isEmpty().escape().trim(),
+    check('gender').not().isEmpty().escape(),
+    check('dob').not().isEmpty().escape(),
+    check('email').not().isEmpty().isEmail().escape().normalizeEmail(),
+    check('password').not().isEmpty().escape(),
   ],
 (req, res)=>{
     const errors = validationResult(req);
@@ -134,7 +135,7 @@ users.get('/logout', (req, res)=>{
 
 //blog api
 users.get('/blog', [
-    check('category').not().isEmpty().escape().withMessage('Your input is not valid'),
+    check('category').not().isEmpty().escape(),
 ], 
 (req, res)=>{
     const errors = validationResult(req);
@@ -150,7 +151,7 @@ users.get('/blog', [
 });
 
 users.get('/confirmation/:token', [
-    check('token').not().isEmpty().escape().withMessage('Your input is not valid'),
+    check('token').not().isEmpty().escape(),
 ],
  async (req, res) => {
     const errors = validationResult(req);
@@ -182,5 +183,84 @@ users.get('/verification', (req, res)=>{
     return res.status(400).json({message: 'Invalid request'});
 })
 
+users.post('/reset_password', [
+    check('email').isEmail().not().isEmpty().escape().normalizeEmail(),
+], 
+(req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    user_email = req.body.email;
+    sql = 'select username, email from crendential where email like ?';
+    con.query(sql, [user_email], (err, result)=>{
+        if(err) {
+            return res.status(400).json({message: err.message});
+        }
+
+        if(result.length != 0) {
+
+            check_otp_q = 'select * from check_otp where user_email like ?';
+            con.query(check_otp_q, [user_email], (err, rlt)=>{
+                if(err){
+                    console.log(err.message);
+                }
+                
+                if (rlt.length != 0) {
+                    return res.send('otp already send to email');
+                }
+                otp = randomstring.generate({length: 6, charset: 'numeric'});
+            
+                insert_query = 'insert into check_otp values(?, ?)';
+                con.query(insert_query, [user_email, otp], (err)=>{
+                    if (err) {
+                        console.log(err.message);
+                    }
+                });
+
+                signSendEmailFP(otp, user_email);
+                return res.json({message: 'Please check your email to reset your password'});
+            });
+             
+        } else {
+            return res.status(400).json({message: 'Please enter valid email'});
+        }
+    });
+});
+
+users.post('/verify_otp', [
+    check('otp').not().isEmpty().escape(),
+    check('password').not().isEmpty().escape(),
+],
+(req, res) => {
+    fp_otp = req.body.otp;
+    user_password = req.body.password;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    q = 'select user_email from check_otp where otp like ?';
+    con.query(q, [fp_otp], (err, result)=>{
+        if(err) {
+            console.log(err.message);
+        }
+
+        if(result.length == 0){
+            return res.status(400).send('invalid request');
+        }
+        q_update = 'UPDATE crendential SET password = ? WHERE email like ?';
+        
+        con.query(q_update, [user_password, result[0].user_email], (err)=>{
+            if(err) {
+                console.log(err.message);
+            }
+        });
+
+        con.query('delete from check_otp where user_email like ?', [result[0].user_email]);
+
+        return res.send('password changed');
+    });
+    
+});
   
 module.exports = users
